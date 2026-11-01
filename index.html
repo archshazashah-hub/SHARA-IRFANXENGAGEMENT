@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#fff9f3">
+<title>Irfan &amp; Sharafina | Engagement Invitation</title>
+<style>
+* { box-sizing: border-box; }
+html, body {
+  margin: 0; width: 100%; min-height: 100%;
+  background: #fff9f3;
+}
+body {
+  min-height: 100vh; min-height: 100svh;
+  display: grid; place-items: center; overflow: hidden;
+}
+.opener {
+  position: relative;
+  width: min(100vw, calc(100svh * 1.46096));
+  aspect-ratio: 1366 / 935;
+  flex: none;
+}
+.opener-image {
+  display: block; width: 100%; height: 100%;
+  object-fit: contain; user-select: none;
+  -webkit-user-drag: none; pointer-events: none;
+}
+/* Clickable area aligns with OPEN INVITATION on the supplied image. */
+.open-link {
+  position: absolute;
+  left: 40.7%; top: 71.3%;
+  width: 20.5%; height: 7.6%;
+  display: block; z-index: 2;
+  border-radius: 999px; background: transparent;
+  text-decoration: none; -webkit-tap-highlight-color: transparent;
+}
+.open-link:focus-visible {
+  outline: 3px solid #a47a42; outline-offset: 5px;
+}
+.music-toggle {
+  position: fixed; z-index: 5;
+  top: calc(14px + env(safe-area-inset-top));
+  right: calc(14px + env(safe-area-inset-right));
+  width: 44px; height: 44px; border-radius: 50%;
+  border: 1px solid #c6a477;
+  background: rgba(255,250,245,.94); color: #805e35;
+  font-size: 20px; cursor: pointer;
+  box-shadow: 0 2px 12px rgba(80,55,30,.10);
+}
+.music-status {
+  position: fixed; z-index: 5;
+  top: calc(64px + env(safe-area-inset-top));
+  right: calc(14px + env(safe-area-inset-right));
+  color: #805e35; font: 12px Georgia, serif;
+}
+</style>
+</head>
+<body>
+<audio id="backgroundMusic" src="./assets/background-music.mp3" preload="auto" loop></audio>
+
+<button class="music-toggle" id="musicToggle" type="button"
+        aria-label="Play background music" title="Play music">♫</button>
+<span class="music-status" id="musicStatus"></span>
+
+<main class="opener">
+  <!-- Exact uploaded JPEG opener: no redesign or image edits. -->
+  <img class="opener-image"
+       src="./assets/invitation-opener.jpeg"
+       alt="Irfan and Sharafina invitation opener">
+
+  <a class="open-link"
+     href="https://sharaxirfanengagement.my.canva.site/engagement-invitation-2026"
+     target="_blank"
+     rel="noopener noreferrer"
+     aria-label="Open the Canva engagement invitation"
+     onclick="startMusicFromInvitationTap()"></a>
+</main>
+
+<script>
+const music = document.getElementById('backgroundMusic');
+const toggle = document.getElementById('musicToggle');
+const status = document.getElementById('musicStatus');
+
+function updateMusicUI() {
+  const playing = !music.paused;
+  toggle.textContent = playing ? '♫' : '♪';
+  toggle.setAttribute('aria-label',
+    playing ? 'Pause background music' : 'Play background music');
+  toggle.title = playing ? 'Pause music' : 'Play music';
+}
+
+function startMusicFromInvitationTap() {
+  music.play().then(() => {
+    status.textContent = '';
+    updateMusicUI();
+  }).catch(() => {
+    status.textContent = 'Tap ♪ to play music';
+  });
+}
+
+toggle.addEventListener('click', async () => {
+  if (music.paused) {
+    try {
+      await music.play();
+      status.textContent = '';
+      updateMusicUI();
+    } catch (error) {
+      status.textContent = 'Music could not start. Check the MP3 file.';
+    }
+  } else {
+    music.pause();
+    updateMusicUI();
+  }
+});
+
+music.addEventListener('play', updateMusicUI);
+music.addEventListener('pause', updateMusicUI);
+updateMusicUI();
+</script>
+</body>
+</html>
